@@ -1,26 +1,5 @@
-/*const elt = document.getElementById("items");
-fetch("http://localhost:3000/api/products")
-  .then(function (res) {
-    if (res.ok) return res.json();
-  })
-  .then(function (value) {
-    value.forEach((product) => {
-      console.log(product.name);
-      elt.innerHTML +=
-        "<a href=" +
-        product.imageUrl +
-        "> " +
-        "<article><img src=" +
-        product.imageUrl +
-        "><h3>" +
-        product.name +
-        "</h3><p>" +
-        product.description +
-        "</p></article></a>";
-    });
-  });*/
-var url = new URL(document.URL);
-var search_params = new URLSearchParams(url.search);
+let url = new URL(document.URL);
+let search_params = new URLSearchParams(url.search);
 if (search_params.has("id")) {
   console.log("Id détecté");
   let name = search_params.get("id");
@@ -43,8 +22,8 @@ fetch("http://localhost:3000/api/products")
         document.getElementById("title").innerHTML = product.name;
         document.getElementsByClassName("item__img")[0].innerHTML =
           '<img src="' + product.imageUrl + '" alt="Coucou">';
-        for (var i = 0; i < product.colors.length; i++) {
-          console.log(i + " : " + product.colors[i]);
+        for (let i = 0; i < product.colors.length; i++) {
+          // console.log("couleur[" + i + "]" + " : " + product.colors[i]);
           document.getElementById("colors").innerHTML +=
             '<option value="' +
             product.colors[i] +
@@ -56,26 +35,75 @@ fetch("http://localhost:3000/api/products")
     });
   });
 
-localStorage.clear();
+//localStorage.clear();
 var submitBtn = document.getElementById("addToCart");
 submitBtn.addEventListener("click", function () {
-  let newCart = {
+  var newCart = {
     id: search_params.get("id"),
     color: document.getElementById("colors").value,
     qty: document.getElementById("quantity").value,
   };
-  console.log("A ajouter dans localstorage : " + newCart.id);
-  if (localStorage.length) {
-    console.log("Nombre objets panier : " + localStorage.carts.length);
-    localStorage.carts += JSON.stringify(newCart);
-    console.log(JSON.stringify(localStorage.carts));
-  } else {
-    console.log("Creation localstorage carlist");
-    localStorage.setItem("carts", JSON.stringify(newCart));
-    console.log("---------- Test stringify --------");
-    console.log(JSON.stringify(localStorage.carts));
-    var test = JSON.parse(localStorage.getItem("carts"));
-    console.log(test);
+
+  if (newCart.qty <= 0 || newCart.qty > 100) {
+    console.log("Quantité non valide");
+    return;
   }
-  console.log("Objet enregistré : " + search_params.get("id"));
+  if (newCart.color == "") {
+    console.log("Couleur non valide");
+    return;
+  }
+  console.log("A ajouter dans localstorage : " + newCart.id);
+  var users = JSON.parse(localStorage.getItem("carts") || "[]");
+  console.log("=======># of users: " + users.length + "<==========");
+  if (users.length > 0) {
+    users.forEach(function (user, index) {
+      console.log(
+        " Index : " + index + " Total d'objets dans panier : " + users.length
+      );
+      console.log(
+        "[" +
+          index +
+          "] Canapé id : " +
+          user.id +
+          " de couleur " +
+          user.color +
+          " en quantité " +
+          user.qty
+      );
+      if (user.id == newCart.id && user.color != newCart.color) {
+        console.log("Objet id : " + user.id + " déjà dans le panier !");
+        console.log(
+          "Objet à rajouter : " +
+            newCart.qty +
+            " | Objet déjà dans le panier : " +
+            user.qty
+        );
+        console.log(
+          "Verification du panier : Objet déjà dans le panier : " +
+            user.qty +
+            " et objet à rajouter : " +
+            newCart.qty
+        );
+        var total = parseInt(user.qty) + parseInt(newCart.qty);
+        console.log("Total du panier + commande : " + total);
+        if (total < 100) {
+          user.qty = total;
+          console.log("Ajout de " + newCart.qty + " dans le panier");
+        } else {
+          console.log(
+            "Impossible d'ajouter articles : Total du panier > 100 !"
+          );
+        }
+      } else if (index == users.length - 1) {
+        console.log("Added user #" + newCart.id);
+        users.push(newCart);
+      } else {
+        console.log("[" + index + "]: " + user.id);
+      }
+    });
+  } else users.push(newCart);
+  localStorage.setItem("carts", JSON.stringify(users));
+  console.log(
+    newCart.qty + " canapé(s) de couleur " + newCart.color + " ajouté au panier"
+  );
 });

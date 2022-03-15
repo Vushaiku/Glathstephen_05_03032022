@@ -1,3 +1,5 @@
+/* Récupération liste produits */
+
 const elt = document.getElementById("items");
 fetch("http://localhost:3000/api/products")
   .then(function (res) {
