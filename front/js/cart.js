@@ -1,6 +1,6 @@
-var panier = JSON.parse(localStorage.getItem("carts") || "[]");
-var total = 0;
-var qtyProducts = 0;
+let panier = JSON.parse(localStorage.getItem("carts") || "[]");
+let total = 0;
+let qtyProducts = 0;
 
 panier.forEach(function (element, index) {
   console.log("Canapé id : " + element.id);
@@ -18,7 +18,7 @@ panier.forEach(function (element, index) {
           total += parseInt(element.qty) * parseInt(product.price);
           document.getElementById("totalPrice").innerHTML = total;
           document.getElementById("totalQuantity").innerHTML = qtyProducts;
-          var elt = document.getElementById("cart__items");
+          let elt = document.getElementById("cart__items");
           elt.innerHTML += `
           <article class="cart__item" data-id="${product._id}" data-color="${product.color}">
                   <div class="cart__item__img">
@@ -50,19 +50,24 @@ panier.forEach(function (element, index) {
     });
 });
 
-var selectElement = document.getElementsByName("itemQuantity");
-
+let selectElement = document.getElementsByName("itemQuantity");
+let deleteButtons = document.getElementsByName("deleteItem");
 function loadListener() {
   if (selectElement) {
     console.log("Element trouvé");
-    for (var i = 0; i < selectElement.length; ++i) {
+    for (let i = 0; i < selectElement.length; ++i) {
       selectElement[i].addEventListener("change", changeQty);
+      // deleteButtons[i].addEventListener("click", deleteItem);
       console.log("Eventlistener ajouté pour produit n." + i);
     }
   } else console.log("Pas de produits !");
 }
 function changeQty(e) {
   console.log("Nouvelle quantité ! (" + this.value + ")");
-  var close = this.closest("[data-id]");
+  let close = this.closest("[data-id]");
   console.log("Article à changer : " + close.dataset.id);
+}
+
+function deleteItem(e) {
+  console.log("Aricle à virer !");
 }

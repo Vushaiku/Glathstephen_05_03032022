@@ -36,9 +36,9 @@ fetch("http://localhost:3000/api/products")
   });
 
 //localStorage.clear();
-var submitBtn = document.getElementById("addToCart");
+let submitBtn = document.getElementById("addToCart");
 submitBtn.addEventListener("click", function () {
-  var newCart = {
+  let newCart = {
     id: search_params.get("id"),
     color: document.getElementById("colors").value,
     qty: document.getElementById("quantity").value,
@@ -53,7 +53,7 @@ submitBtn.addEventListener("click", function () {
     return;
   }
   console.log("A ajouter dans localstorage : " + newCart.id);
-  var users = JSON.parse(localStorage.getItem("carts") || "[]");
+  let users = JSON.parse(localStorage.getItem("carts") || "[]");
   console.log("=======># of users: " + users.length + "<==========");
   if (users.length > 0) {
     users.forEach(function (user, index) {
@@ -84,7 +84,7 @@ submitBtn.addEventListener("click", function () {
             " et objet à rajouter : " +
             newCart.qty
         );
-        var total = parseInt(user.qty) + parseInt(newCart.qty);
+        let total = parseInt(user.qty) + parseInt(newCart.qty);
         console.log("Total du panier + commande : " + total);
         if (total < 100) {
           user.qty = total;
