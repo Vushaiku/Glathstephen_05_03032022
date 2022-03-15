@@ -45,11 +45,11 @@ submitBtn.addEventListener("click", function () {
   };
 
   if (newCart.qty <= 0 || newCart.qty > 100) {
-    console.log("Quantité non valide");
+    alert("Quantité non valide");
     return;
   }
   if (newCart.color == "") {
-    console.log("Couleur non valide");
+    alert("Couleur non valide");
     return;
   }
   console.log("A ajouter dans localstorage : " + newCart.id);

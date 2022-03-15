@@ -57,7 +57,7 @@ function loadListener() {
     console.log("Element trouvé");
     for (let i = 0; i < selectElement.length; ++i) {
       selectElement[i].addEventListener("change", changeQty);
-      // deleteButtons[i].addEventListener("click", deleteItem);
+      //deleteButtons[i].addEventListener("click", deleteItem);
       console.log("Eventlistener ajouté pour produit n." + i);
     }
   } else console.log("Pas de produits !");
