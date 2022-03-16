@@ -2,15 +2,19 @@ let panier = JSON.parse(localStorage.getItem("carts") || "[]");
 let total = 0;
 let qtyProducts = 0;
 
+let selectElement = document.getElementsByName("itemQuantity");
+let deleteButtons = document.getElementsByClassName("deleteItem");
+let submitButton = document.getElementById("order");
+
 displayCart();
 function displayCart() {
   if (!panier || panier.length == 0) {
     console.log("PAS D'ARTICLES !");
     document.getElementById("totalPrice").innerHTML = "0";
     document.getElementById("totalQuantity").innerHTML = "0";
+    loadListener();
     return;
   }
-
   let elt = document.getElementById("cart__items");
   elt.innerHTML = "";
   qtyProducts = 0;
@@ -59,13 +63,11 @@ function displayCart() {
         });
       })
       .then(function (res) {
+        console.log("Listener en chargement");
         loadListener();
       });
   });
 }
-
-let selectElement = document.getElementsByName("itemQuantity");
-let deleteButtons = document.getElementsByClassName("deleteItem");
 
 function loadListener() {
   if (deleteButtons) console.log("Buttons supprimer trouvé !");
@@ -77,6 +79,8 @@ function loadListener() {
       console.log("Eventlistener ajouté pour produit n." + i);
     }
   } else console.log("Pas de produits !");
+  submitButton.addEventListener("click", order);
+  console.log("Value submitbutton : " + submitButton.value);
 }
 function changeQty(e) {
   console.log("Nouvelle quantité ! (" + this.value + ")");
@@ -120,4 +124,33 @@ function deleteProduct(e) {
   console.log("Nombre d'articles : " + panier.length);
   localStorage.setItem("carts", JSON.stringify(panier));
   displayCart();
+}
+
+// firstName lastName address city email | input type="submit" value="Commander !" id="order">
+
+function order(e) {
+  console.log("Event envoi reçu");
+  let fn = document.getElementById("firstName");
+  let ln = document.getElementById("lastName");
+  let adr = document.getElementById("address");
+  let city = document.getElementById("city");
+  let mail = document.getElementById("email");
+  let regexName = /\b[a-df-z]+\b/gi;
+  var nameRegex = new RegExp(/^[a-zA-Z-]+$/);
+  let mailRegex = new RegExp(
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+  );
+  var valid = nameRegex.test(fn.value);
+  console.log("Test de " + fn.value + " : " + valid);
+  if (valid == true) alert("Nom valide ! ");
+  if (mailRegex.test(mail.value)) alert("mail valide");
+
+  let contact = {
+    nom: fn.value,
+    prenom: ln.value,
+    adresse: adr.value,
+    ville: city.value,
+    courriel: mail.value,
+  };
+  alert("contact : " + contact.nom);
 }
