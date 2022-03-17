@@ -142,15 +142,43 @@ function order(e) {
   );
   var valid = nameRegex.test(fn.value);
   console.log("Test de " + fn.value + " : " + valid);
-  if (valid == true) alert("Nom valide ! ");
-  if (mailRegex.test(mail.value)) alert("mail valide");
+  if (valid == true) console.log("Nom valide ! ");
+  if (mailRegex.test(mail.value)) console.log("mail valide");
 
   let contact = {
-    nom: fn.value,
-    prenom: ln.value,
-    adresse: adr.value,
-    ville: city.value,
-    courriel: mail.value,
+    firstName: fn.value,
+    lastName: ln.value,
+    address: adr.value,
+    city: city.value,
+    email: mail.value,
   };
-  alert("contact : " + contact.nom);
+
+  const products = [];
+  panier.forEach((item, index) => {
+    products.push(item.id);
+    console.log("Id à ajouter dans le productsId : " + products[index]);
+  });
+  let request = new Request("http://localhost:3000/api/products/order/", {
+    method: "POST",
+    body: JSON.stringify({ contact, products }),
+    headers: new Headers({
+      Accept: "application/json",
+      "Content-type": "application/json",
+    }),
+  });
+
+  alert("Fetch incoming");
+  fetch(request)
+    .then((response) => response.json())
+    .then((response) => {
+      let getOrderId = response.orderId;
+      alert("TEST : ID de la commande : " + getOrderId);
+      window.location.replace(
+        "http://localhost:5500/front/html/confirmation.html?id=" + getOrderId
+      );
+    })
+    .catch((error) => {
+      console.error("ERROR ! ", error);
+    });
+  alert("PAUSE");
 }
