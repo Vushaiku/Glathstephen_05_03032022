@@ -56,6 +56,7 @@ submitBtn.addEventListener("click", function () {
   let users = JSON.parse(localStorage.getItem("carts") || "[]");
   console.log("=======># of users: " + users.length + "<==========");
   if (users.length > 0) {
+    var inCart = false;
     users.forEach(function (user, index) {
       console.log(
         " Index : " + index + " Total d'objets dans panier : " + users.length
@@ -93,8 +94,9 @@ submitBtn.addEventListener("click", function () {
           console.log(
             "Impossible d'ajouter articles : Total du panier > 100 !"
           );
+          inCart = true;
         }
-      } else if (index == users.length - 1) {
+      } else if (index == users.length - 1 && inCart == false) {
         console.log("Added user #" + newCart.id);
         users.push(newCart);
       } else {

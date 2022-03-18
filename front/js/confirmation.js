@@ -10,3 +10,4 @@ if (search_params.has("id")) {
 
 let eltOrder = document.getElementById("orderId");
 eltOrder.innerHTML = search_params.get("id");
+localStorage.clear();

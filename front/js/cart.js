@@ -181,9 +181,13 @@ function order(e) {
     .then((response) => response.json())
     .then((response) => {
       let getOrderId = response.orderId;
-      window.location.replace(
-        "http://localhost:5500/front/html/confirmation.html?id=" + getOrderId
-      );
+      let currentUrl = document.URL;
+      currentUrl = currentUrl.replace("cart", "confirmation");
+      alert(currentUrl);
+      window.location.replace(currentUrl + "?id=" + getOrderId);
+      // window.location.replace(
+      //    "http://localhost:5500/front/html/confirmation.html?id=" + getOrderId
+      // );
     })
     .catch((error) => {
       console.error("ERROR ! ", error);
