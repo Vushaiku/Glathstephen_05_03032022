@@ -8,14 +8,15 @@ let submitButton = document.getElementById("order");
 
 displayCart();
 function displayCart() {
+  let elt = document.getElementById("cart__items");
   if (!panier || panier.length == 0) {
     console.log("PAS D'ARTICLES !");
     document.getElementById("totalPrice").innerHTML = "0";
     document.getElementById("totalQuantity").innerHTML = "0";
+    elt.innerHTML = "";
     loadListener();
     return;
   }
-  let elt = document.getElementById("cart__items");
   elt.innerHTML = "";
   qtyProducts = 0;
   total = 0;
@@ -37,7 +38,7 @@ function displayCart() {
             document.getElementById("totalPrice").innerHTML = total;
             document.getElementById("totalQuantity").innerHTML = qtyProducts;
             elt.innerHTML += `
-          <article class="cart__item" data-id="${product._id}" data-color="${product.color}">
+          <article class="cart__item" data-id="${product._id}" data-color="${element.color}">
                   <div class="cart__item__img">
                     <img src="${product.imageUrl}" alt="${product.altTxt}">
                   </div>
@@ -113,7 +114,16 @@ function deleteProduct(e) {
   let close = this.closest("[data-id]");
   console.log("Aricle à virer !");
   panier.forEach(function (element, index) {
-    if (element.id == close.dataset.id) {
+    console.log(
+      "Dataset-id :" +
+        close.dataset.id +
+        " et  dataset-color : " +
+        close.dataset.color
+    );
+    if (
+      element.id == close.dataset.id &&
+      element.color == close.dataset.color
+    ) {
       console.log("Objet à effacer trouvé !");
       panier.splice(index, 1);
     }
@@ -167,12 +177,10 @@ function order(e) {
     }),
   });
 
-  alert("Fetch incoming");
   fetch(request)
     .then((response) => response.json())
     .then((response) => {
       let getOrderId = response.orderId;
-      alert("TEST : ID de la commande : " + getOrderId);
       window.location.replace(
         "http://localhost:5500/front/html/confirmation.html?id=" + getOrderId
       );
@@ -180,5 +188,4 @@ function order(e) {
     .catch((error) => {
       console.error("ERROR ! ", error);
     });
-  alert("PAUSE");
 }

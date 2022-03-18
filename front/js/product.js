@@ -70,7 +70,7 @@ submitBtn.addEventListener("click", function () {
           " en quantité " +
           user.qty
       );
-      if (user.id == newCart.id && user.color != newCart.color) {
+      if (user.id == newCart.id && user.color == newCart.color) {
         console.log("Objet id : " + user.id + " déjà dans le panier !");
         console.log(
           "Objet à rajouter : " +
